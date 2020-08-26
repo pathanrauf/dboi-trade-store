@@ -1,21 +1,18 @@
 package com.dboi.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.SchedulingConfigurer;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-import org.springframework.scheduling.config.ScheduledTaskRegistrar;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @Configuration
-public class SchedulerConfig implements SchedulingConfigurer {
-    private final int POOL_SIZE = 1;
+@EnableAsync
+public class SchedulerConfig
+{
 
-    @Override
-    public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
-        ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-        threadPoolTaskScheduler.setPoolSize(POOL_SIZE);
-        threadPoolTaskScheduler.setThreadNamePrefix("my-scheduled-task-pool-");
-        threadPoolTaskScheduler.initialize();
-
-        scheduledTaskRegistrar.setTaskScheduler(threadPoolTaskScheduler);
-    }
+	@Bean
+	TaskExecutor taskExecutor() {
+		return new SimpleAsyncTaskExecutor();
+	}
 }
