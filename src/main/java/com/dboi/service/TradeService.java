@@ -29,7 +29,7 @@ public class TradeService
 			throw new RecordNotFoundException("No employee record exist for given id");
 		}
 	}
-
+	
 	public TradeStoreEntity storeTrade(TradeStoreEntity tradeStore) throws RecordNotFoundException {
 		Optional<TradeStoreEntity> trade = getTradeStoreEntity(tradeStore.getTradeId());
 		TradeStoreEntity tradeStoreEntity = null;
@@ -41,20 +41,8 @@ public class TradeService
 			if (tradeStoreEntity.getVersion() > tradeStore.getVersion()) {
 				throw new RecordNotFoundException("Old Version Trade not Allowed");
 			}
-			tradeStoreEntity.setVersion(tradeStore.getVersion());
-			tradeStoreEntity.setBookId(tradeStore.getBookId());
-			tradeStoreEntity.setBookIdMaturityDate(tradeStore.getBookIdMaturityDate());
-			tradeStoreEntity.setCounterPartyId(tradeStore.getCounterPartyId());
-		} else {
-			tradeStoreEntity = new TradeStoreEntity();
-			tradeStoreEntity.setTradeId(tradeStore.getTradeId());
-			tradeStoreEntity.setVersion(tradeStore.getVersion());
-			tradeStoreEntity.setBookId(tradeStore.getBookId());
-			tradeStoreEntity.setBookIdMaturityDate(tradeStore.getBookIdMaturityDate());
-			tradeStoreEntity.setCounterPartyId(tradeStore.getCounterPartyId());
-			tradeStoreEntity.setCreatedDate(new Date(new java.util.Date().getTime()));
 		}
-		return tradeRepo.save(tradeStoreEntity);
+		return tradeRepo.save(tradeStore);
 	}
 
 	public List<TradeStoreEntity> markExpired() {
